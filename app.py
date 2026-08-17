@@ -49,14 +49,29 @@ st.markdown("<h1>|Movie Recommendation System|</h1>", unsafe_allow_html=True)
 
 st.write("### Get Top Similar Movie Recommendations Instantly")
 
-# LOAD DATASET
+# LOAD MOVIE DATASET
 movies = pd.read_csv("data/movies.csv")
 
+# LOAD RATINGS DATASET
+ratings = pd.read_csv("data/ratings.csv")
+
+# CALCULATE AVERAGE RATING FOR EACH MOVIE
+average_ratings = ratings.groupby('movieId')['rating'].mean().reset_index()
+
+# RENAME COLUMN
+average_ratings.rename(columns={'rating': 'avg_rating'}, inplace=True)
+
+# MERGE RATINGS WITH MOVIE DATA
+movies = movies.merge(average_ratings, on='movieId', how='left')
+
 # KEEP REQUIRED COLUMNS
-movies = movies[['title', 'genres']]
+movies = movies[['movieId', 'title', 'genres', 'avg_rating']]
 
 # REMOVE NULL VALUES
 movies.dropna(inplace=True)
+
+# RESET INDEX
+movies.reset_index(drop=True, inplace=True)
 
 # CONVERT GENRES INTO VECTORS
 cv = CountVectorizer(tokenizer=lambda x: x.split('|'))
@@ -130,6 +145,7 @@ def recommend(movie):
     recommended_movies = []
     recommended_posters = []
     similarity_scores = []
+    movie_ratings = []
 
     for i in movie_list:
 
@@ -138,6 +154,11 @@ def recommend(movie):
         recommended_movies.append(movie_name)
 
         similarity_scores.append(round(i[1], 2))
+
+        # GET AVERAGE MOVIE RATING
+        rating = movies.iloc[i[0]]['avg_rating']
+
+        movie_ratings.append(round(rating, 1))
 
         poster = fetch_poster(movie_name)
 
@@ -152,7 +173,8 @@ def recommend(movie):
         searched_movie_poster,
         recommended_movies,
         recommended_posters,
-        similarity_scores
+        similarity_scores,
+        movie_ratings
     )
 
 
@@ -180,7 +202,8 @@ if st.button("Recommend Movies"):
             searched_poster,
             names,
             posters,
-            scores
+            scores,
+            ratings
         ) = result
 
         st.markdown("---")
@@ -218,4 +241,5 @@ if st.button("Recommend Movies"):
                     unsafe_allow_html=True
                 )
 
+                st.write(f"⭐ Rating: {ratings[idx]}/5")
                 st.write(f"Similarity: {scores[idx]}")
