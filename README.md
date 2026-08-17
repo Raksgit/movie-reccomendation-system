@@ -136,6 +136,14 @@ The application provides a simple interface where users can enter a movie name a
 * Deploy the application online
 * Add a more advanced recommendation model
 
+## 📸 Screenshots
+
+### Movie Search
+![Movie Search](screenshots/searchbox.png)
+
+### Movie Recommendations
+![Movie Recommendations](screenshots/reccomendations.png)
+
 ## 👨‍💻 Author
 
  RAKSHAN R ADAPA
