@@ -8,46 +8,105 @@ from sklearn.metrics.pairwise import cosine_similarity
 # PAGE CONFIG
 st.set_page_config(
     page_title="Movie Recommendation System",
-    page_icon=" ",
+    page_icon="🎬",
     layout="wide"
 )
 
-# CUSTOM CSS
+# NETFLIX STYLE CSS
 st.markdown("""
 <style>
 
-body {
-    background-color: #0E1117;
+.stApp {
+    background: linear-gradient(180deg, #0b0b0f, #141414);
+    color: white;
 }
 
 .main {
-    background-color: #0E1117;
+    background-color: #0b0b0f;
 }
 
+/* Main title */
 h1 {
-    color: #FF4B4B;
+    color: #e50914;
     text-align: center;
+    font-size: 45px;
+    font-weight: 800;
 }
 
+/* Section headings */
+h2, h3 {
+    color: white;
+}
+
+/* Search box */
+div[data-baseweb="input"] {
+    background-color: #222222;
+    border: 1px solid #555555;
+    border-radius: 8px;
+}
+
+input {
+    color: white !important;
+}
+
+/* Recommend button */
+.stButton > button {
+    width: 100%;
+    background-color: #e50914;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.stButton > button:hover {
+    background-color: #b20710;
+}
+
+/* Movie title */
 .movie-title {
     text-align: center;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     color: white;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
-.poster {
-    border-radius: 15px;
+/* Rating */
+.rating {
+    text-align: center;
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* Similarity */
+.similarity {
+    text-align: center;
+    color: #aaaaaa;
+    font-size: 12px;
+}
+
+hr {
+    border-color: #333333;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
 # TITLE
-st.markdown("<h1>|Movie Recommendation System|</h1>", unsafe_allow_html=True)
+st.markdown(
+    "<h1>🎬 Movie Recommendation System</h1>",
+    unsafe_allow_html=True
+)
 
-st.write("### Get Top Similar Movie Recommendations Instantly")
+st.markdown(
+    "<p style='text-align:center;color:#aaaaaa;font-size:18px;'>"
+    "Discover movies similar to your favourites"
+    "</p>",
+    unsafe_allow_html=True
+)
 
 # LOAD MOVIE DATASET
 movies = pd.read_csv("data/movies.csv")
